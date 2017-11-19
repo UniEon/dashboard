@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% load dashboard_tags %}
+{% load crispy_forms_tags %}
+{% block content %}  
+  <!--center-->
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3><a href="{{ question.get_absolute_url }}"> {{question.title}} </a></h3>
+        <p class="pull-right">
+          {% for tag in question.tags.all %}
+          <a href="{% url 'questions_by_tag' tag.slug %}"><span class="label label-default">{{tag}}</span></a>
+          {% endfor %}
+        </p>
+        <ul class="list-inline"><li><a href="{{ question.get_absolute_url }}">{{question.created}}</a></li><li><a href="{{ question.get_absolute_url }}">{{question.answers.count}} Answer{{question.answers.count|pluralize}}</a></li><li><a href="{% url 'user_profile' question.author %}">{{question.author.profile}}</a></li></ul>
+        <p> {{question.body|markdown}} </p>
+    <hr>
+    <h4>Answers</h4>
+    {% for answer in answers %}
+    <article class="comment">      
+    <div class="comment-body">
+      <div class="text">
+        <p> {{answer.body|linebreaks}}</p>
+      </div>
+      <p class="attribution">by <a href="{% url 'user_profile' answer.name %}">{{answer.name.profile}}</a> at {{answer.created}}</p>
+    </div>
+  </article>
+  <br>
+  {% empty %}
+  <p>There are no answers yet. Be the first one to answer.</p>
+  {% endfor %}
+
+    <h2>Add a new answer</h2>
+    <form action="." method="post">
+      {{answer_form|crispy}}
+      {% csrf_token %}
+      <input class="btn btn-default" type="submit" value="Add Answer" />
+    </form>
+    </div>
+    </div>
+
+ 
+
+    <hr>
+  </div><!--/center-->
+{% endblock %}

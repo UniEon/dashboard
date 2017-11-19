@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block content %}  
+  <!--center-->
+  <div class="col-sm-6">
+  {% for story in stories %}
+    <div class="row">
+      <div class="col-xs-12">
+        <h4><a href="{{ story.get_news_absolute_url }}"> {{story.title}} </a></h4>
+        <p>Source: <a href="{{ story.source }}"> {{ story.source }} </a></p>
+        <p class="pull-right">
+        	{% for tag in story.tags.all %}
+        	<a href="{% url 'stories_by_tag' tag.slug %}"><span class="label label-default">{{tag}}</span></a>
+        	{% endfor %}
+        </p>
+        <ul class="list-inline"><li><a href="{{ story.get_news_absolute_url }}">{{story.created}}</a></li><li><a href="{{ story.get_news_absolute_url }}">{{story.comments.count}} Comment{{story.comments.count|pluralize}}</a></li><li><a href="{% url 'user_profile' story.author %}">{{story.author.profile}}</a></li></ul>
+      <hr>
+	  </div>
+    </div>
+  {% endfor %}
+    
+    {% include "pagination.html" with page=stories %}
+    <hr>
+  </div><!--/center-->
+{% endblock %}

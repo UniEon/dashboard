@@ -1,0 +1,40 @@
+{% extends "index.html" %}
+{% block content %}
+<!--center-->
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-xs-12">
+        {% if usr.first_name %}
+        <div class="panel-heading">Profile of {{usr.first_name}}</div>
+        {% else %}
+        <div class="panel-heading">Profile of {{usr}}</div>
+        {% endif %}
+        <hr>
+        {% ifequal request.user usr %}
+        
+        <a href="{% url 'profile_edit' %}"><button class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit Profile</button></a>
+        {% endifequal %}
+        <div class="row">
+                <div class="col-md-6">
+                  <span class="text-muted">First Name:</span>{{usr.first_name}}<br>
+                  <span class="text-muted">Last Name:</span> {{usr.last_name}}<br>
+                  <span class="text-muted">Email:</span> {{usr.email }}<br>
+                  <span class="text-muted">DOB:</span> {{profile_usr.date_of_birth}}<br>
+                  <span class="text-muted">Bio:</span> {{profile_usr.work_or_study}}<br>
+                  <span class="text-muted">Skills:</span> {{profile_usr.skills}}<br>
+                </div>
+
+        
+        </div>
+
+
+
+    </div>
+    </div>
+
+ 
+
+    <hr>
+  </div><!--/center-->
+{% endblock %}
+

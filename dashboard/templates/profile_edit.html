@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+  <!--center-->
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>Profile Edit</h3>
+		<h5><a href="{% url 'password_change' %}">Change Password</a></h5>
+		
+		<form action="." method="post">
+        	{{ user_form|crispy }}
+			{{ profile_form|crispy }}
+        	{% csrf_token %}
+        	<input class="btn btn-default" type="submit" value="Save changes" />
+        </form>
+	
+    </div>
+    </div>
+
+ 
+
+    <hr>
+  </div><!--/center-->
+{% endblock %}

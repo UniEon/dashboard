@@ -1,0 +1,147 @@
+{% load staticfiles %}
+{% load dashboard_tags %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>FrontBoard</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/icon" href="{% static 'img/favicon.ico' %}">
+    <style type="text/css">
+    .panel-heading {
+     background-color: #222222 !important;
+     color: white !important ;
+   }
+   div {
+    word-wrap: break-word;
+   }
+
+   .comment {
+    overflow: hidden;
+    padding: 0 0 1em;
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 1em;
+    *zoom: 1;
+    width: 100%;
+}
+.comment-body { overflow: hidden }
+.comment .text {
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background: #fff;
+}
+.comment .text p:last-child { margin: 0 }
+.comment .attribution {
+    margin: 0.5em 0 0;
+    font-size: 14px;
+    color: #666;
+    margin-left: 10px;
+}
+
+
+
+
+
+   </style>
+	</head>
+	<body>
+    <!--changed navbar-default to navbar-center-->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar-header">
+        <a class="navbar-brand" rel="home" href="/">FrontBoard</a>
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		</button>
+	</div>
+	<div class="collapse navbar-collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="{% url 'questions_board' %}">Questions</a></li>
+			<li><a href="{% url 'stories_board' %}">News</a></li>
+			<li><a href="{% url 'users_board' %}">Users</a></li>
+      {% if request.user.is_authenticated %}
+      <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{request.user.profile}} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'profile_edit' %}">Profile Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+              </ul>
+            </li>
+            {% endif %}
+		</ul>
+		
+	</div>
+</nav>
+
+<div class="container-fluid">
+  
+  <!--left-->
+  <div class="col-sm-3">
+
+    	<div class="panel panel-default">
+         	<div class="panel-heading">Common Questions Tags</div>
+         	<div class="panel-body">
+          {% top_question_tags %}
+         	</div>
+
+        </div>
+        <hr>
+        
+ 
+        <div class="panel panel-default">
+         	<div class="panel-heading">Common News Tags</div>
+         	<div class="panel-body">
+          {% top_story_tags %}
+          </div>
+        </div>
+        <hr>
+        
+  </div><!--/left-->
+  
+  <!--center-->
+  {% block content %}
+  {% endblock %}
+
+  <!--right-->
+  <div class="col-sm-3">
+    	<div class="panel panel-default">
+          {% if request.user.is_authenticated %}
+         	<div class="panel-heading">{{request.user.profile}}</div>
+         	<div class="panel-body">
+            <p class="lead"><a href="{% url 'new_question' %}"><button class="btn btn-default">Ask a Question</button></a></p>
+            <p class="lead"><a href="{% url 'new_story' %}"><button class="btn btn-default">Post a News</button></a></p>
+          </div>
+        </div>
+          {% else %}
+          <div class="panel-heading">Account Registration</div>
+          <div class="panel-body">
+            <p class="lead"><a href="{% url 'login' %}"><button class="btn btn-default">Login</button></a></p>
+            
+            <p class="lead"><a href="{% url 'signup' %}"><button class="btn btn-default">Signup</button></a></p>
+          {% endif %}
+        <hr>
+        <div class="panel panel-default">
+         	<div class="panel-heading">About This Website</div>
+         	<div class="panel-body"><a href="{% url 'about' %}">About </a> <br><a href="{% url 'policy' %}">Usage Policy </a> <br><a href="{% url 'feedback' %}">Feedback </a> <br>
+        </div>
+        <hr>
+  </div><!--/right-->
+  <hr>
+</div><!--/container-fluid-->
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	</body>
+</html>
