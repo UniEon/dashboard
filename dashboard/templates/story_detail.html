@@ -21,7 +21,7 @@
     <article class="comment">      
     <div class="comment-body">
       <div class="text">
-        <p> {{comment.body|linebreaks}}</p>
+        <p> {{comment.body|linebreaks|urlize}}</p>
       </div>
       <p class="attribution">by <a href="{% url 'user_profile' comment.name %}">{{comment.name.profile}}</a> {{comment.created|naturaltime}}</p>
     </div>

@@ -188,7 +188,7 @@ def new_story(request):
             new_story.author=usr
             new_story.save()
             story_form.save_m2m()
-            return redirect('/stories/')
+            return redirect('/news/')
         else:
             messages.error(request,'Error Posting Story.')
             story_form=StoryForm()
