@@ -63,22 +63,24 @@ def question_detail(request, year, month, day, question):
     
     answers=question.answers.filter(active=True)
     answer_form=AnswerForm()
-    if request.method=='POST':  #an answer is posted
-        answer_form=AnswerForm(data=request.POST or None)
-        if answer_form.is_valid():
-            new_answer=answer_form.save(commit=False)
-            new_answer.question=question
-            u=request.user
-            new_answer.name= u
-            new_answer.save()
-            q_notify.objects.create(Actor=request.user,
-                                    Object=question,
-                                    Target=question.author)
-            return HttpResponseRedirect("")
-            
+    if request.method=='POST':#an answer is posted
+        if request.user.is_authenticated():
+            answer_form=AnswerForm(data=request.POST or None)
+            if answer_form.is_valid():
+                new_answer=answer_form.save(commit=False)
+                new_answer.question=question
+                u=request.user
+                new_answer.name= u
+                new_answer.save()
+                q_notify.objects.create(Actor=request.user,
+                                        Object=question,
+                                        Target=question.author)
+                return HttpResponseRedirect("")            
+            else:
+                answer_form=AnswerForm()
+                new_answer=False
         else:
-            answer_form=AnswerForm()
-            new_answer=False
+            return redirect('login')
     else:
         answer_form=AnswerForm()
         new_answer=False
@@ -118,20 +120,23 @@ def story_detail(request, year, month, day, story):
     comments=story.comments.filter(active=True)
     comment_form=CommentForm()
     if request.method=='POST': #a comment is posted
-        comment_form=CommentForm(data=request.POST or None)
-        if comment_form.is_valid():
-            new_comment=comment_form.save(commit=False)
-            new_comment.story=story
-            u=request.user
-            new_comment.name=u
-            new_comment.save()
-            s_notify.objects.create(Actor=request.user,
-                                    Object=story,
-                                    Target=story.author)
-            return HttpResponseRedirect("")
+        if request.user.is_authenticated():
+            comment_form=CommentForm(data=request.POST or None)
+            if comment_form.is_valid():
+                new_comment=comment_form.save(commit=False)
+                new_comment.story=story
+                u=request.user
+                new_comment.name=u
+                new_comment.save()
+                s_notify.objects.create(Actor=request.user,
+                                        Object=story,
+                                        Target=story.author)
+                return HttpResponseRedirect("")
+            else:
+                comment_form=CommentForm()
+                new_comment=False
         else:
-            comment_form=CommentForm()
-            new_comment=False
+            return redirect('login')
     else:
         comment_form=CommentForm()
         new_comment=False
@@ -337,7 +342,7 @@ def feedback(request):
     return render(request,
                   'feedback.html',
                   {'feedback_form':feedback_form})
-
+@login_required
 def Activities(request):
     story_events=s_notify.objects.filter(Target=request.user)
     question_events=q_notify.objects.filter(Target=request.user)
