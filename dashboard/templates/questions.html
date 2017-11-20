@@ -1,9 +1,12 @@
 {% extends "index.html" %}
-
+{% load humanize %}
 
 {% block content %}
 
   <div class="col-sm-6">
+    {% if tag %}
+    <p>Questions posted by tag {{tag}}.</p>
+    {% endif %}
   {% for question in questions %}
     <div class="row">
       <div class="col-xs-12">
@@ -15,7 +18,7 @@
         	<a href="{% url 'questions_by_tag' tag.slug %}"><span class="label label-default">{{tag}}</span></a>
         	{% endfor %}
         </p>
-        <ul class="list-inline"><li><a href="{{ question.get_absolute_url }}">{{question.created}}</a></li><li><a href="{{ question.get_absolute_url }}"><i class="glyphicon glyphicon-pencil"></i>{{question.answers.count}} Answer{{question.answers.count|pluralize}}</a></li><li><a href="{% url 'user_profile' question.author %}">{{question.author.profile}}</a></li></ul>
+        <ul class="list-inline"><li><a href="{{ question.get_absolute_url }}">{{question.created|naturaltime}}</a></li><li><a href="{{ question.get_absolute_url }}"><i class="glyphicon glyphicon-pencil"></i>{{question.answers.count}} Answer{{question.answers.count|pluralize}}</a></li><li><a href="{% url 'user_profile' question.author %}">{{question.author.profile}}</a></li></ul>
 		<hr>
 	  </div>
     </div>

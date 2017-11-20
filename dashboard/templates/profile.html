@@ -1,4 +1,5 @@
 {% extends "index.html" %}
+{% load humanize %}
 {% block content %}
 <!--center-->
   <div class="col-sm-6">
@@ -26,6 +27,17 @@
 
         
         </div>
+    <hr>
+    <h3>Feed</h3>
+    {% for feed in user_feeds %}
+    <p><a href="{{ feed.get_absolute_url }}">{{feed}}</a> {{feed.created|naturaltime}}</p>
+    {% empty %}
+    <p>No feed yet.</p>
+    {% endfor %}
+
+    <hr>
+    {% include "pagination.html" with page=user_feeds %}
+
 
 
 

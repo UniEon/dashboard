@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer, Story, Comment, Profile, Feedback
+from .models import Question, Answer, Story, Comment, Profile, Feedback, q_notify, s_notify
 # Register your models here.
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -34,3 +34,11 @@ admin.site.register(Profile, ProfileAdmin)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display=('name','email','created')
 admin.site.register(Feedback,FeedbackAdmin)
+
+class q_notifyAdmin(admin.ModelAdmin):
+    list_display=('Actor','Object','created')
+admin.site.register(q_notify, q_notifyAdmin)
+
+class s_notifyAdmin(admin.ModelAdmin):
+    list_display=('Actor','Object','created')
+admin.site.register(s_notify, s_notifyAdmin)

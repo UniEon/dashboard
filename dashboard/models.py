@@ -48,7 +48,7 @@ class Answer(models.Model):
 class Story(models.Model):
     title=models.CharField(max_length=250)
     slug=AutoSlugField(populate_from='title', unique_with='created')
-    author=models.ForeignKey(User, related_name='posted_story')
+    author=models.ForeignKey(User, related_name='posted_stories')
     source = models.URLField(max_length=250)
     created= models.DateTimeField(default=timezone.now)
     updated=models.DateTimeField(auto_now=True)
@@ -56,7 +56,7 @@ class Story(models.Model):
 
     class Meta:
         ordering=('-created',)
-    def get_news_absolute_url(self):
+    def get_absolute_url(self):
         return reverse('story_detail',
                        args=[self.created.year,
                              self.created.strftime('%m'),
@@ -105,3 +105,22 @@ class Feedback(models.Model):
     created=models.DateTimeField(auto_now_add=True)
     
 
+class q_notify(models.Model):
+    Actor=models.ForeignKey(User, related_name='q_activities')
+    Object=models.ForeignKey(Question, related_name='q_notif')
+    Target=models.ForeignKey(User, related_name='q_events')
+    created=models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return '{} answered your question {}.'.format\
+               (self.Actor.profile, self.Object)
+class s_notify(models.Model):
+    Actor=models.ForeignKey(User, related_name='s_activities')
+    Object=models.ForeignKey(Story, related_name='s_notif')
+    Target=models.ForeignKey(User, related_name='s_events')
+    created=models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return '{} commented on your news {}.'.format\
+               (self.Actor.profile, self.Object)
+    
+
+    

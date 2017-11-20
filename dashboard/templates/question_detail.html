@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% load dashboard_tags %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 {% block content %}  
   <!--center-->
   <div class="col-sm-6">
@@ -12,7 +13,7 @@
           <a href="{% url 'questions_by_tag' tag.slug %}"><span class="label label-default">{{tag}}</span></a>
           {% endfor %}
         </p>
-        <ul class="list-inline"><li><a href="{{ question.get_absolute_url }}">{{question.created}}</a></li><li><a href="{{ question.get_absolute_url }}">{{question.answers.count}} Answer{{question.answers.count|pluralize}}</a></li><li><a href="{% url 'user_profile' question.author %}">{{question.author.profile}}</a></li></ul>
+        <ul class="list-inline"><li>{{question.created|naturaltime}}</li><li>{{question.answers.count}} Answer{{question.answers.count|pluralize}}</a></li><li><a href="{% url 'user_profile' question.author %}">{{question.author.profile}}</a></li></ul>
         <p> {{question.body|markdown}} </p>
     <hr>
     <h4>Answers</h4>
@@ -22,7 +23,7 @@
       <div class="text">
         <p> {{answer.body|linebreaks}}</p>
       </div>
-      <p class="attribution">by <a href="{% url 'user_profile' answer.name %}">{{answer.name.profile}}</a> at {{answer.created}}</p>
+      <p class="attribution">by <a href="{% url 'user_profile' answer.name %}">{{answer.name.profile}}</a>  {{answer.created|naturaltime}}</p>
     </div>
   </article>
   <br>

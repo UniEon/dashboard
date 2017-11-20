@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'dashboard',
     'taggit',
     'crispy_forms',
+    'django.contrib.humanize',
 
     
     'django.contrib.admin',

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Question, Story, Profile
+from .models import Question, Story, Profile, q_notify, s_notify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from taggit.models import Tag
 from django.db.models import Count
@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.core.urlresolvers import reverse
 # Create your views here.
         
 def frontboard(request, tag_slug=None):
@@ -59,6 +60,7 @@ def question_detail(request, year, month, day, question):
                                created__year=year,
                                created__month=month,
                                created__day=day)
+    
     answers=question.answers.filter(active=True)
     answer_form=AnswerForm()
     if request.method=='POST':  #an answer is posted
@@ -69,6 +71,9 @@ def question_detail(request, year, month, day, question):
             u=request.user
             new_answer.name= u
             new_answer.save()
+            q_notify.objects.create(Actor=request.user,
+                                    Object=question,
+                                    Target=question.author)
             return HttpResponseRedirect("")
             
         else:
@@ -120,6 +125,9 @@ def story_detail(request, year, month, day, story):
             u=request.user
             new_comment.name=u
             new_comment.save()
+            s_notify.objects.create(Actor=request.user,
+                                    Object=story,
+                                    Target=story.author)
             return HttpResponseRedirect("")
         else:
             comment_form=CommentForm()
@@ -265,19 +273,48 @@ def profile_edit(request):
 def profile(request):
     usr=request.user
     profile_usr=request.user.profile
+    q_feed=usr.asked_questions.filter()
+    s_feed=usr.posted_stories.filter()
+    feed=list(q_feed)+list(s_feed)
+    sorted_feed=sorted(feed, key=lambda x:x.created)
+    paginator=Paginator(sorted_feed, 30)
+    page=request.GET.get('page')
+    try:
+        user_feeds=paginator.page(page)
+    except PageNotAnInteger:
+        user_feeds=paginator.page(1)
+    except EmptyPage:
+        user_feeds=paginator.page(paginator.num_pages)
+        
     return render(request,
                   'profile.html',
                   {'usr':usr,
-                   'profile_usr':profile_usr})
+                   'profile_usr':profile_usr,
+                   'page':page,
+                   'user_feeds':user_feeds})
 @login_required
 def user_profile(request, username):
     usr=get_object_or_404(User,
                           username=username)
     profile_usr=usr.profile
+    q_feed=usr.asked_questions.filter()
+    s_feed=usr.posted_stories.filter()
+    feed=list(q_feed)+list(s_feed)
+    sorted_feed=sorted(feed, key=lambda x: x.created)
+    paginator=Paginator(sorted_feed, 30)
+    page=request.GET.get('page')
+    try:
+        user_feeds=paginator.page(page)
+    except PageNotAnInteger:
+        user_feeds=paginator.page(1)
+    except EmptyPage:
+        user_feeds=paginator.page(paginator.num_pages)
     return render(request,
                   'profile.html',
                   {'usr':usr,
-                   'profile_usr':profile_usr})
+                   'profile_usr':profile_usr,
+                   'page':page,
+                   'user_feeds':user_feeds})
 
 
 def policy(request):
@@ -300,3 +337,23 @@ def feedback(request):
     return render(request,
                   'feedback.html',
                   {'feedback_form':feedback_form})
+
+def Activities(request):
+    story_events=s_notify.objects.filter(Target=request.user)
+    question_events=q_notify.objects.filter(Target=request.user)
+    all_events=list(story_events)+list(question_events)
+    sorted_events=sorted(all_events, key=lambda x: x.created)
+    paginator=Paginator(sorted_events, 30)
+    page=request.GET.get('page')
+    try:
+        events=paginator.page(page)
+    except PageNotAnInteger:
+        events=paginator.page(1)
+    except EmptyPage:
+        events=paginator.page(paginator.num_pages)
+    return render(request,
+                  'activities.html',
+                  {'page':page,
+                   'events':events})
+
+    
