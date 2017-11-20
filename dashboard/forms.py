@@ -27,7 +27,7 @@ class StoryForm(forms.ModelForm):
         'cols':'70'}))
     class Meta:
         model = Story
-        fields = ('title','source')
+        fields = ('title','source','tags')
 
 class CommentForm(forms.ModelForm):
     body=forms.CharField(widget=forms.Textarea(attrs={
