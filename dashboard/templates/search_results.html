@@ -1,0 +1,24 @@
+{% extends "index.html" %}  
+{% load humanize %}
+{% block content %}
+  <!--center-->
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel-heading">Search Results</div>
+        <hr>
+        {% for result in results %}
+        <p>{{result.family}}  <a href="{{ result.get_absolute_url }}"> {{result}}</a> {{result.created|naturaltime}}</p>
+        {% empty %}
+        <p>No results found.</p>
+        {% endfor %}
+    </div>
+    </div>
+
+ 
+    <hr>
+    {% include "pagination.html" with page=results %}
+    <hr>
+  </div><!--/center-->
+{% endblock %}
+

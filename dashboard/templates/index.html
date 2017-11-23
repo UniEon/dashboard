@@ -13,10 +13,11 @@
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
     <link rel="icon" type="image/icon" href="{% static 'img/favicon.ico' %}">
     <style type="text/css">
     .panel-heading {
-     background-color: #222222 !important;
+     background-color: #6c7a89 !important;
      color: white !important ;
    }
    div {
@@ -46,6 +47,90 @@
     margin-left: 10px;
 }
 
+.navbar-default {
+  background-color: #6c7a89;
+  border-color: #4c6680;
+}
+.navbar-default .navbar-brand {
+  color: #f4f4f7;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #35363d;
+}
+.navbar-default .navbar-text {
+  color: #f4f4f7;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #f4f4f7;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #35363d;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu {
+  background-color: #6c7a89;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a {
+  color: #f4f4f7;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+  color: #35363d;
+  background-color: #4c6680;
+}
+.navbar-default .navbar-nav > li > .dropdown-menu > li.divider {
+  background-color: #4c6680;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #35363d;
+  background-color: #4c6680;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #35363d;
+  background-color: #4c6680;
+}
+.navbar-default .navbar-toggle {
+  border-color: #4c6680;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #4c6680;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #f4f4f7;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #f4f4f7;
+}
+.navbar-default .navbar-link {
+  color: #f4f4f7;
+}
+.navbar-default .navbar-link:hover {
+  color: #35363d;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #f4f4f7;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #35363d;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #35363d;
+    background-color: #4c6680;
+  }
+}
+
 
 
 
@@ -54,7 +139,7 @@
 	</head>
 	<body>
     <!--changed navbar-default to navbar-center-->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="navbar-header">
         <a class="navbar-brand" rel="home" href="/">FrontBoard</a>
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -83,6 +168,16 @@
             </li>
             {% endif %}
 		</ul>
+    <div class="col-sm-3 col-md-3 pull-right">
+          <form class="navbar-form" role="search" action="{% url 'search' %}" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="query" id="srch-term">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Submit</button>
+                </div>
+            </div>
+          </form>
+    </div>
 		
 	</div>
 </nav>

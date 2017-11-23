@@ -17,15 +17,18 @@ class Question(models.Model):
     created=models.DateTimeField(default=timezone.now)
     updated=models.DateTimeField(auto_now=True)
     tags = TaggableManager()
+    family='Question'
 
     class Meta:
         ordering= ('-created',)
+        
     def get_absolute_url(self):
         return reverse('question_detail',
                        args=[self.created.year,
                              self.created.strftime('%m'),
                              self.created.strftime('%d'),
                              self.slug])
+    
     def __str__(self):
         return self.title
 
@@ -53,6 +56,7 @@ class Story(models.Model):
     created= models.DateTimeField(default=timezone.now)
     updated=models.DateTimeField(auto_now=True)
     tags = TaggableManager()
+    family='News'
 
     class Meta:
         ordering=('-created',)

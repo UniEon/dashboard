@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^about/$',views.about, name='about'),
     url(r'^feedback/$',views.feedback, name='feedback'),
     url(r'^activities/$',views.Activities, name='activities'),
+    url(r'^search/$',views.search_page,name='search'),
     
     url(r'^admin/', include(admin.site.urls)),
 ]

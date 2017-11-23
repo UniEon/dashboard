@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 #question forms
 class QuestionForm(forms.ModelForm):
     title=forms.CharField(widget=forms.TextInput(attrs={'maxlength':150}))
+    tags=forms.CharField(widget=forms.TextInput(attrs={'maxlength':64}))
     class Meta:
         model = Question
         fields = ('title','body','tags')
@@ -25,6 +26,7 @@ class StoryForm(forms.ModelForm):
     title=forms.CharField(widget=forms.Textarea(attrs={
         'rows':'2',
         'cols':'70'}))
+    tags=forms.CharField(widget=forms.TextInput(attrs={'maxlength':64}))
     class Meta:
         model = Story
         fields = ('title','source','tags')
@@ -66,3 +68,4 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model=Feedback
         fields=('name','email','feedback')
+

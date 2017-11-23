@@ -8,7 +8,8 @@ from django.utils import timezone
 import pytz
 from datetime import timedelta
 from .forms import QuestionForm, AnswerForm, StoryForm,\
-     CommentForm, LoginForm, SignupForm, UserEditForm, ProfileEditForm, FeedbackForm
+     CommentForm, LoginForm, SignupForm, UserEditForm, ProfileEditForm,\
+     FeedbackForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -361,4 +362,25 @@ def Activities(request):
                   {'page':page,
                    'events':events})
 
+def search_page(request):
+    q=request.GET['query']
+    if q:
+        questions_list=Question.objects.filter(title__icontains=q)
+        stories_list=Story.objects.filter(title__icontains=q)
+        all_results=list(questions_list)+list(stories_list)
+        sorted_results=sorted(all_results, key=lambda x: x.created)
+        paginator=Paginator(sorted_results,30)
+        page=request.GET.get('page')
+        try:
+            results=paginator.page(page)
+        except PageNotAnInteger:
+            results=paginator.page(1)
+        except EmptyPage:
+            results=paginator.page(paginator.num_pages)
+        return render(request,
+                      'search_results.html',
+                      {'page':page,
+                      'results':results})
+    else:
+        return HttpResponseRedirect('/')
     
